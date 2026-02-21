@@ -140,18 +140,19 @@ export default function PracticeScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   scrollView: { flex: 1 },
-  scrollContent: { paddingHorizontal: 18, paddingTop: 12, paddingBottom: 28 },
+  scrollContent: { paddingHorizontal: 22, paddingTop: 16, paddingBottom: 34 },
   header: {
-    marginBottom: 10,
+    marginBottom: 14,
   },
   title: {
-    fontSize: 26,
+    fontSize: 28,
+    lineHeight: 34,
     fontWeight: "700",
   },
   subtitle: {
-    marginTop: 4,
-    fontSize: 14,
-    lineHeight: 19,
+    marginTop: 8,
+    fontSize: 15,
+    lineHeight: 22,
   },
   hintBanner: {
     marginBottom: 12,
@@ -167,18 +168,21 @@ const styles = StyleSheet.create({
   hintText: {
     flex: 1,
     color: "#92400E",
-    fontSize: 12,
+    fontSize: 13,
+    lineHeight: 18,
     fontWeight: "500",
   },
   pathTitle: {
-    fontSize: 20,
+    fontSize: 22,
+    lineHeight: 28,
     fontWeight: "700",
   },
   pathSubtitle: {
-    marginTop: 4,
-    fontSize: 13,
+    marginTop: 6,
+    fontSize: 14,
+    lineHeight: 20,
   },
   pathSection: {
-    marginTop: 10,
+    marginTop: 14,
   },
 });

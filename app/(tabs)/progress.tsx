@@ -19,7 +19,7 @@ export default function ProgressScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   scrollView: { flex: 1 },
-  scrollContent: { paddingHorizontal: 20, paddingTop: 16 },
-  title: { fontSize: 24, fontWeight: "700", marginBottom: 8 },
-  subtitle: { fontSize: 16 },
+  scrollContent: { paddingHorizontal: 22, paddingTop: 18, paddingBottom: 28 },
+  title: { fontSize: 26, lineHeight: 32, fontWeight: "700", marginBottom: 10 },
+  subtitle: { fontSize: 16, lineHeight: 23 },
 });

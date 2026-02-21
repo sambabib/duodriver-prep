@@ -12,23 +12,30 @@ interface CategoryPathSectionProps {
   onPressNode: (node: PracticeNodeData) => void;
 }
 
-const DEFAULT_VISIBLE_NODES = 8;
+const DEFAULT_VISIBLE_NODES = 4;
 
 export function CategoryPathSection({
   category,
   nodes,
   onPressNode,
 }: CategoryPathSectionProps) {
-  const { surface, border, text, textMuted, isDark } = useThemeColors();
+  const { surface, border, text } = useThemeColors();
   const [expanded, setExpanded] = useState(false);
   const completedCount = nodes.filter((node) => node.status === "completed").length;
-  const completionRatio = nodes.length > 0 ? completedCount / nodes.length : 0;
   const shouldCollapse = nodes.length > DEFAULT_VISIBLE_NODES;
 
   const visibleNodes = useMemo(() => {
     if (!shouldCollapse || expanded) return nodes;
     return nodes.slice(0, DEFAULT_VISIBLE_NODES);
   }, [nodes, expanded, shouldCollapse]);
+
+  const nodeRows = useMemo(() => {
+    const rows: PracticeNodeData[][] = [];
+    for (let i = 0; i < visibleNodes.length; i += 4) {
+      rows.push(visibleNodes.slice(i, i + 4));
+    }
+    return rows;
+  }, [visibleNodes]);
 
   return (
     <View style={[styles.container, { backgroundColor: surface, borderColor: border }]}>
@@ -38,47 +45,63 @@ export function CategoryPathSection({
         </View>
         <View style={styles.headerText}>
           <Text style={[styles.title, { color: text }]}>{category.title}</Text>
-          <Text style={[styles.subtitle, { color: textMuted }]}>
-            {completedCount}/{nodes.length} checkpoints complete
+        </View>
+        <View
+          style={[
+            styles.counterPill,
+            {
+              backgroundColor: `${category.color}1A`,
+              borderColor: `${category.color}66`,
+            },
+          ]}
+        >
+          <Text style={[styles.counterText, { color: category.color }]}>
+            {completedCount}/{nodes.length}
           </Text>
         </View>
       </View>
 
-      <View style={[styles.progressTrack, { backgroundColor: isDark ? "#27272A" : "#E4E4E7" }]}>
-        <View
-          style={[
-            styles.progressFill,
-            {
-              width: `${completionRatio * 100}%`,
-              backgroundColor: category.color,
-            },
-          ]}
-        />
-      </View>
-
-      <View style={styles.grid}>
-        {visibleNodes.map((node) => (
-          <PathNode
-            key={`${category.id}-${node.nodeIndex}`}
-            status={node.status}
-            color={category.color}
-            label={`${node.nodeIndex + 1}`}
-            onPress={() => onPressNode(node)}
-          />
+      <View style={styles.pathArea}>
+        {nodeRows.map((row, rowIndex) => (
+          <View key={`${category.id}-row-${rowIndex}`} style={styles.pathRow}>
+            {row.map((node) => (
+              <PathNode
+                status={node.status}
+                color={category.color}
+                label={`${node.nodeIndex + 1}`}
+                onPress={() => onPressNode(node)}
+                key={`${category.id}-${node.nodeIndex}`}
+              />
+            ))}
+          </View>
         ))}
       </View>
 
       {shouldCollapse ? (
-        <Pressable onPress={() => setExpanded((prev) => !prev)} style={styles.showMoreButton}>
-          <Text style={[styles.showMoreText, { color: category.color }]}>
-            {expanded ? "Show less" : `Show more (${nodes.length - visibleNodes.length})`}
-          </Text>
-          <Ionicons
-            name={expanded ? "chevron-up" : "chevron-down"}
-            size={14}
-            color={category.color}
+        <View style={styles.showMoreButton}>
+          <View
+            style={[
+              styles.showMoreShadow,
+              { backgroundColor: `${category.color}CC` },
+            ]}
           />
-        </Pressable>
+          <Pressable
+            onPress={() => setExpanded((prev) => !prev)}
+            style={({ pressed }) => [
+              styles.showMoreFace,
+              { backgroundColor: category.color, opacity: pressed ? 0.92 : 1 },
+            ]}
+          >
+            <Text style={styles.showMoreText}>
+              {expanded ? "Show Less" : `Show More (${nodes.length - visibleNodes.length})`}
+            </Text>
+            <Ionicons
+              name={expanded ? "chevron-up" : "chevron-down"}
+              size={14}
+              color="#FFFFFF"
+            />
+          </Pressable>
+        </View>
       ) : null}
     </View>
   );
@@ -87,9 +110,9 @@ export function CategoryPathSection({
 const styles = StyleSheet.create({
   container: {
     borderWidth: 1,
-    borderRadius: 20,
-    padding: 14,
-    marginBottom: 12,
+    borderRadius: 14,
+    padding: 16,
+    marginBottom: 14,
   },
   header: {
     flexDirection: "row",
@@ -104,41 +127,62 @@ const styles = StyleSheet.create({
   },
   headerText: {
     marginLeft: 10,
+    flex: 1,
   },
   title: {
-    fontSize: 17,
+    fontSize: 18,
+    lineHeight: 24,
     fontWeight: "700",
   },
-  subtitle: {
-    marginTop: 2,
-    fontSize: 12,
+  counterPill: {
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingHorizontal: 11,
+    paddingVertical: 7,
+    minWidth: 78,
+    alignItems: "center",
   },
-  progressTrack: {
-    marginTop: 12,
-    height: 6,
-    borderRadius: 999,
-    overflow: "hidden",
+  counterText: {
+    fontSize: 20,
+    lineHeight: 24,
+    fontWeight: "700",
   },
-  progressFill: {
-    height: "100%",
-    borderRadius: 999,
+  pathArea: {
+    marginTop: 16,
   },
-  grid: {
-    marginTop: 12,
+  pathRow: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 14,
   },
   showMoreButton: {
-    marginTop: 12,
-    alignSelf: "flex-start",
+    marginTop: 6,
+    width: "100%",
+    position: "relative",
+  },
+  showMoreShadow: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: -3,
+    height: "100%",
+    borderRadius: 12,
+  },
+  showMoreFace: {
+    width: "100%",
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
     flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    gap: 4,
-    paddingVertical: 4,
+    gap: 6,
   },
   showMoreText: {
-    fontSize: 13,
+    color: "#FFFFFF",
+    fontSize: 14,
     fontWeight: "600",
   },
 });

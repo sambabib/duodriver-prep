@@ -17,31 +17,19 @@ export function PathNode({ status, color, label, onPress }: PathNodeProps) {
   const isCompleted = status === "completed";
   const isActive = status === "active";
 
-  const backgroundColor = isCompleted ? color : isActive ? `${color}14` : isDark ? "#222225" : "#F4F4F5";
-  const borderColor = isCompleted ? color : isActive ? color : isDark ? "#3F3F46" : "#E4E4E7";
+  const faceColor = isCompleted ? color : isActive ? (isDark ? "#1F1F23" : "#FFFFFF") : isDark ? "#252529" : "#F4F4F5";
+  const borderColor = isCompleted ? color : isActive ? color : isDark ? "#3F3F46" : "#D4D4D8";
+  const pedestalColor = isCompleted ? `${color}CC` : isActive ? `${color}88` : isDark ? "#19191C" : "#D4D4D8";
+  const iconName = isCompleted ? "checkmark" : isActive ? "star" : "lock-closed";
+  const iconColor = isCompleted ? "#FFFFFF" : isActive ? color : textMuted;
 
   return (
     <Pressable onPress={onPress} style={styles.wrapper}>
-      <View style={[styles.node, { backgroundColor, borderColor }]}>
-        <Text style={[styles.index, { color: isCompleted ? "#FFFFFF" : isLocked ? textMuted : color }]}>
-          {label}
-        </Text>
-        {isCompleted ? (
-          <View style={[styles.badge, styles.badgeCompleted]}>
-            <Ionicons name="checkmark" size={10} color={color} />
-          </View>
-        ) : null}
-        {isActive ? (
-          <View style={[styles.badge, { backgroundColor: color }]}>
-            <Ionicons name="play" size={8} color="#FFFFFF" />
-          </View>
-        ) : null}
-        {isLocked ? (
-          <View style={[styles.badge, styles.badgeLocked]}>
-            <Ionicons name="lock-closed" size={8} color={textMuted} />
-          </View>
-        ) : null}
+      <View style={[styles.pedestal, { backgroundColor: pedestalColor }]} />
+      <View style={[styles.node, { backgroundColor: faceColor, borderColor }]}>
+        <Ionicons name={iconName} size={22} color={iconColor} />
       </View>
+      <Text style={[styles.index, { color: isLocked ? textMuted : color }]}>{label}</Text>
     </Pressable>
   );
 }
@@ -49,34 +37,31 @@ export function PathNode({ status, color, label, onPress }: PathNodeProps) {
 const styles = StyleSheet.create({
   wrapper: {
     alignItems: "center",
+    width: 74,
+  },
+  pedestal: {
+    position: "absolute",
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    top: 6,
   },
   node: {
-    width: 64,
-    height: 44,
-    borderRadius: 12,
-    borderWidth: 1.5,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 2,
     alignItems: "center",
     justifyContent: "center",
-    position: "relative",
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    elevation: 3,
   },
   index: {
-    fontSize: 14,
+    marginTop: 8,
+    fontSize: 12,
     fontWeight: "700",
-  },
-  badge: {
-    position: "absolute",
-    top: -6,
-    right: -6,
-    width: 16,
-    height: 16,
-    borderRadius: 999,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  badgeCompleted: {
-    backgroundColor: "#FFFFFF",
-  },
-  badgeLocked: {
-    backgroundColor: "#E4E4E7",
   },
 });
