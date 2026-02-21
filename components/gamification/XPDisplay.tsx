@@ -27,17 +27,17 @@ export function XPDisplay({ xp, size = "md" }: XPDisplayProps) {
         {
           paddingHorizontal: config.paddingH,
           paddingVertical: config.paddingV,
-          backgroundColor: isDark ? "rgba(99, 102, 241, 0.2)" : colors.primary[100],
+          backgroundColor: isDark ? "rgba(34, 197, 94, 0.2)" : colors.success[100],
         },
       ]}
     >
-      <Ionicons name="star" size={config.icon} color={colors.primary[500]} />
+      <Ionicons name="star" size={config.icon} color={colors.success[500]} />
       <Text
         style={[
           styles.text,
           {
             fontSize: config.fontSize,
-            color: isDark ? colors.primary[400] : colors.primary[600],
+            color: isDark ? colors.success[400] : colors.success[600],
           },
         ]}
       >

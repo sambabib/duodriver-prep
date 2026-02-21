@@ -20,13 +20,13 @@ export default function TabLayout() {
             ? colors.dark.surface
             : colors.light.surface,
           borderTopColor: isDark ? colors.dark.border : colors.light.border,
-          paddingTop: 8,
-          height: 88,
+          paddingTop: 6,
+          height: 80,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: "600",
-          marginTop: 4,
+          marginTop: 3,
         },
       }}
     >
@@ -34,8 +34,8 @@ export default function TabLayout() {
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="home" size={22} color={color} />
           ),
         }}
       />
@@ -43,8 +43,8 @@ export default function TabLayout() {
         name="practice"
         options={{
           title: "Practice",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="book" size={size} color={color} />
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="book" size={22} color={color} />
           ),
         }}
       />
@@ -52,8 +52,8 @@ export default function TabLayout() {
         name="progress"
         options={{
           title: "Progress",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="stats-chart" size={size} color={color} />
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="stats-chart" size={22} color={color} />
           ),
         }}
       />
@@ -61,8 +61,8 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="person" size={22} color={color} />
           ),
         }}
       />

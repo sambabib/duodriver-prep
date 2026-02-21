@@ -1,15 +1,16 @@
 import React from "react";
 import {
-  TouchableOpacity,
+  Pressable,
   Text,
   ActivityIndicator,
-  TouchableOpacityProps,
+  PressableProps,
   View,
   StyleSheet,
+  PressableStateCallbackType,
 } from "react-native";
 import { colors } from "@/constants/theme";
 
-interface ButtonProps extends TouchableOpacityProps {
+interface ButtonProps extends PressableProps {
   title: string;
   variant?: "primary" | "secondary" | "outline" | "ghost" | "success" | "error";
   size?: "sm" | "md" | "lg";
@@ -30,77 +31,88 @@ export function Button({
   ...props
 }: ButtonProps) {
   const variantStyles = {
-    primary: { backgroundColor: colors.primary[500] },
-    secondary: { backgroundColor: colors.light.surface },
-    outline: { backgroundColor: "transparent", borderWidth: 2, borderColor: colors.primary[500] },
-    ghost: { backgroundColor: "transparent" },
-    success: { backgroundColor: colors.success[500] },
-    error: { backgroundColor: colors.error[500] },
+    primary: { face: colors.primary[500], shadow: colors.primary[700], text: "#FFFFFF" },
+    secondary: { face: colors.light.surface, shadow: colors.light.border, text: colors.light.text },
+    outline: { face: "transparent", shadow: colors.primary[500], text: colors.primary[500] },
+    ghost: { face: "transparent", shadow: "transparent", text: colors.primary[500] },
+    success: { face: colors.success[500], shadow: colors.success[700], text: "#FFFFFF" },
+    error: { face: colors.error[500], shadow: colors.error[700], text: "#FFFFFF" },
   };
 
   const sizeStyles = {
-    sm: { paddingHorizontal: 16, paddingVertical: 8 },
-    md: { paddingHorizontal: 24, paddingVertical: 12 },
-    lg: { paddingHorizontal: 32, paddingVertical: 16 },
+    sm: { paddingHorizontal: 16, paddingVertical: 8, radius: 12, fontSize: 14, shadowOffset: 3 },
+    md: { paddingHorizontal: 22, paddingVertical: 12, radius: 14, fontSize: 14, shadowOffset: 4 },
+    lg: { paddingHorizontal: 28, paddingVertical: 14, radius: 16, fontSize: 16, shadowOffset: 5 },
   };
 
-  const textColors = {
-    primary: "#FFFFFF",
-    secondary: colors.light.text,
-    outline: colors.primary[500],
-    ghost: colors.primary[500],
-    success: "#FFFFFF",
-    error: "#FFFFFF",
-  };
+  const config = sizeStyles[size];
+  const palette = variantStyles[variant];
+  const isDisabled = disabled || loading;
 
-  const textSizes = {
-    sm: 14,
-    md: 16,
-    lg: 18,
+  const mergedStyle = (state: PressableStateCallbackType) => {
+    const dynamicStyle = typeof style === "function" ? style(state) : style;
+    return [styles.wrapper, isDisabled && styles.disabled, dynamicStyle];
   };
 
   return (
-    <TouchableOpacity
-      style={[
-        styles.base,
-        variantStyles[variant],
-        sizeStyles[size],
-        (disabled || loading) && styles.disabled,
-        style,
-      ]}
-      disabled={disabled || loading}
-      activeOpacity={0.8}
+    <Pressable
+      disabled={isDisabled}
+      style={mergedStyle}
       {...props}
     >
-      {loading ? (
-        <ActivityIndicator
-          color={variant === "outline" || variant === "ghost" ? colors.primary[500] : "#FFFFFF"}
-          size="small"
-        />
-      ) : (
-        <View style={styles.content}>
-          {icon && iconPosition === "left" && icon}
-          <Text
-            style={[
-              styles.text,
-              { color: textColors[variant], fontSize: textSizes[size] },
-            ]}
-          >
-            {title}
-          </Text>
-          {icon && iconPosition === "right" && icon}
-        </View>
-      )}
-    </TouchableOpacity>
+      <View
+        style={[
+          styles.shadow,
+          {
+            backgroundColor: palette.shadow,
+            borderRadius: config.radius,
+            top: config.shadowOffset,
+          },
+        ]}
+      />
+      <View
+        style={[
+          styles.face,
+          {
+            backgroundColor: palette.face,
+            borderRadius: config.radius,
+            paddingHorizontal: config.paddingHorizontal,
+            paddingVertical: config.paddingVertical,
+            borderWidth: variant === "outline" ? 2 : 0,
+            borderColor: variant === "outline" ? colors.primary[500] : "transparent",
+          },
+        ]}
+      >
+        {loading ? (
+          <ActivityIndicator
+            color={variant === "outline" || variant === "ghost" ? colors.primary[500] : "#FFFFFF"}
+            size="small"
+          />
+        ) : (
+          <View style={styles.content}>
+            {icon && iconPosition === "left" && icon}
+            <Text style={[styles.text, { color: palette.text, fontSize: config.fontSize }]}>{title}</Text>
+            {icon && iconPosition === "right" && icon}
+          </View>
+        )}
+      </View>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  base: {
-    flexDirection: "row",
+  wrapper: {
+    position: "relative",
+  },
+  face: {
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 12,
+  },
+  shadow: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: -4,
   },
   disabled: {
     opacity: 0.5,
@@ -111,6 +123,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   text: {
-    fontWeight: "600",
+    fontFamily: "Poppins_600SemiBold",
   },
 });
