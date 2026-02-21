@@ -15,6 +15,7 @@ export default function TabLayout() {
         tabBarInactiveTintColor: isDark
           ? colors.dark.textMuted
           : colors.light.textMuted,
+        tabBarShowLabel: false,
         tabBarStyle: {
           backgroundColor: isDark
             ? colors.dark.surface
@@ -22,11 +23,6 @@ export default function TabLayout() {
           borderTopColor: isDark ? colors.dark.border : colors.light.border,
           paddingTop: 6,
           height: 80,
-        },
-        tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: "600",
-          marginTop: 3,
         },
       }}
     >
@@ -54,6 +50,15 @@ export default function TabLayout() {
           title: "Progress",
           tabBarIcon: ({ color }) => (
             <Ionicons name="stats-chart" size={22} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="leaderboard"
+        options={{
+          title: "Leaderboard",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="trophy" size={22} color={color} />
           ),
         }}
       />

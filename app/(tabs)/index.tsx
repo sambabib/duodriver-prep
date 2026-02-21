@@ -497,10 +497,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   heartsMeterRow: {
-    width: heartsMeterWidth,
+    width: "auto",
     height: heartsMeterHeight,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    gap: 4,
   },
 });
