@@ -17,7 +17,16 @@ export interface UserProgress {
   questionsAnswered: number;
   correctAnswers: number;
   categoryProgress: Record<string, CategoryProgress>;
+  history: ProgressHistoryPoint[];
   lastPracticeDate: string | null;
+}
+
+export interface ProgressHistoryPoint {
+  dateKey: string;
+  totalXP: number;
+  questionsAnswered: number;
+  correctAnswers: number;
+  dayStreak: number;
 }
 
 export interface CategoryProgress {
