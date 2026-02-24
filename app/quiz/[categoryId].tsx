@@ -202,7 +202,14 @@ export default function QuizScreen() {
       <View style={styles.header}>
         <Button title="" variant="ghost" icon={<Ionicons name="close" size={28} color="#71717A" />} onPress={handleFinish} />
         <View style={styles.progressContainer}>
-          <ProgressBar progress={currentIndex + 1} total={questions.length} size="md" variant="primary" />
+          <ProgressBar
+            progress={currentIndex + 1}
+            total={questions.length}
+            size="md"
+            variant="primary"
+            height={24}
+            borderRadius={9}
+          />
         </View>
         <HeartsDisplay hearts={progress.hearts} maxHearts={progress.maxHearts} size="md" />
       </View>
@@ -229,7 +236,7 @@ export default function QuizScreen() {
         <Button
           title={showResult ? "Continue" : "Check Answer"}
           variant={selectedAnswer !== null ? "primary" : "secondary"}
-          size="lg"
+          size="md"
           disabled={selectedAnswer === null && !showResult}
           onPress={showResult ? handleContinue : handleCheckAnswer}
         />

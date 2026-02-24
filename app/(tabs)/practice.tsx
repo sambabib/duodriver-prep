@@ -5,6 +5,7 @@ import { useThemeColors } from "@/hooks/useThemeColors";
 import { useUserStore } from "@/store/useUserStore";
 import { categories } from "@/constants/categories";
 import { router } from "expo-router";
+import { StatusIsland } from "@/components/gamification";
 import {
   CategoryPathSection,
   PracticeSummaryCard,
@@ -94,6 +95,15 @@ export default function PracticeScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: background }]}>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+        <View style={styles.statusIslandRow}>
+          <StatusIsland
+            streak={progress.dayStreak}
+            hearts={progress.hearts}
+            maxHearts={progress.maxHearts}
+            xp={progress.totalXP}
+          />
+        </View>
+
         <View style={styles.header}>
           <Text style={[styles.title, { color: text }]}>Practice</Text>
           <Text style={[styles.subtitle, { color: textMuted }]}>
@@ -102,10 +112,6 @@ export default function PracticeScreen() {
         </View>
 
         <PracticeSummaryCard
-          streak={progress.dayStreak}
-          hearts={progress.hearts}
-          maxHearts={progress.maxHearts}
-          xp={progress.totalXP}
           accuracy={accuracy}
           onContinue={handleContinuePractice}
         />
@@ -140,7 +146,11 @@ export default function PracticeScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   scrollView: { flex: 1 },
-  scrollContent: { paddingHorizontal: 22, paddingTop: 16, paddingBottom: 34 },
+  scrollContent: { paddingHorizontal: 22, paddingBottom: 34 },
+  statusIslandRow: {
+    alignItems: "center",
+    paddingVertical: 14,
+  },
   header: {
     marginBottom: 14,
   },

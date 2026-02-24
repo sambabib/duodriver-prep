@@ -9,6 +9,8 @@ interface ProgressBarProps {
   showLabel?: boolean;
   variant?: "primary" | "success" | "warning" | "error";
   size?: "sm" | "md" | "lg";
+  height?: number;
+  borderRadius?: number;
 }
 
 export function ProgressBar({
@@ -17,6 +19,8 @@ export function ProgressBar({
   showLabel = false,
   variant = "primary",
   size = "md",
+  height,
+  borderRadius,
 }: ProgressBarProps) {
   const { text, textMuted, border } = useThemeColors();
   const percentage = Math.min((progress / total) * 100, 100);
@@ -34,6 +38,9 @@ export function ProgressBar({
     lg: 12,
   };
 
+  const resolvedHeight = height ?? sizeHeights[size];
+  const resolvedRadius = borderRadius ?? 999;
+
   return (
     <View style={styles.container}>
       {showLabel && (
@@ -44,11 +51,16 @@ export function ProgressBar({
           </Text>
         </View>
       )}
-      <View style={[styles.track, { height: sizeHeights[size], backgroundColor: border }]}>
+      <View
+        style={[
+          styles.track,
+          { height: resolvedHeight, borderRadius: resolvedRadius, backgroundColor: border },
+        ]}
+      >
         <View
           style={[
             styles.fill,
-            { backgroundColor: variantColors[variant], width: `${percentage}%` },
+            { backgroundColor: variantColors[variant], width: `${percentage}%`, borderRadius: resolvedRadius },
           ]}
         />
       </View>

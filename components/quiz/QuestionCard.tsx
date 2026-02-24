@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
     height: 192,
   },
   question: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "600",
-    lineHeight: 28,
+    lineHeight: 25,
   },
 });

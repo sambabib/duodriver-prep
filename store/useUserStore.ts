@@ -124,6 +124,26 @@ export const useUserStore = create<UserState>()(
     {
       name: "user-storage",
       storage: createJSONStorage(() => AsyncStorage),
+      version: 2,
+      migrate: (persistedState: unknown) => {
+        if (!persistedState || typeof persistedState !== "object") {
+          return persistedState as UserState;
+        }
+
+        const state = persistedState as { progress?: UserProgress };
+        if (!state.progress) {
+          return persistedState as UserState;
+        }
+
+        return {
+          ...state,
+          progress: {
+            ...state.progress,
+            hearts: 5,
+            maxHearts: 5,
+          },
+        } as UserState;
+      },
     }
   )
 );
